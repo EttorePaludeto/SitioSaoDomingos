@@ -6,24 +6,80 @@
 
 
 
-<div class="container p-4">
-    <form method="post" enctype="multipart/form-data">
-        <div class="row">
-            <div class="col-sm-6 col-md-3">
-                <div class="card-header">
-                    <output id="imageUser">
-                        <img src=@image class="iamgeUser" />
-                    </output>
+    <div class="container p-4">
+        <form method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6 col-md-3">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            <output id="imageUser">
+                                <img src=@image class="imageUser" />
+                            </output>
+                        </div>
+                        <div class="card-body">
+                            <div class="caption text-center">
+                                <label class="btn btn-primary" for="files">Carregar Foto</label>
+                                <input asp-for="Inserir.AvatarImage" accept="image/*" type="file" id="files" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="caption text-center">
-                        <label class="btn btn-primary" for="files">Carregar Foto</label> 
-                        <imput asp-for="imput.AvatarImage" accept="image/*" type="file" id="files">
+
+                <div class="col-xs-6 col-md-5">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Registrar Usuários</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="accordion" id="accordionExemplo">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <div id="header" class="bg-info">
+                                        <h2 class="mb-0 t">
+                                            <button class="btn btn-link text-light" type="button" data-toggle="collapse"
+                                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                Abrir
+                                            </button>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExemplo">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <input asp-for="Inserir.Nome" placeholder="Nome" class="form-control" autofocus />
+                                            <span asp-validation-for="Inserir.Nome" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input asp-for="Inserir.SobreNome" placeholder="Sobre Nome" class="form-control" />
+                                            <span asp-validation-for="Inserir.SobreNome" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input asp-for="Inserir.Telefone" placeholder="Telefone" class="form-control" />
+                                            <span asp-validation-for="Inserir.Telefone" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input asp-for="Inserir.Email" placeholder="E-mail" class="form-control" />
+                                            <span asp-validation-for="Inserir.Email" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input asp-for="Inserir.Senha" placeholder="Senha" class="form-control" />
+                                            <span asp-validation-for="Inserir.Senha" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                          @*  @Html.DropDownList("Inserir.Role", new SelectList(Model.Inserir.rolesLista, "text", "text"), "Selecione a regra", new { @class = "form-control" });*@
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="text-danger">@Html.DisplayFor(m=>m.Inserir.ErrorMessage)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-
-</div>
+        </form>
+    </div>
 

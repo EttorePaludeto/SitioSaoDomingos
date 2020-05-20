@@ -1,0 +1,48 @@
+﻿@page
+@model IEnumerable<SaoDomingos.Web.Dev.Models.Usuario>
+
+@{
+    ViewData["Title"] = "GridUsuarios";
+}
+
+<h2>GridUsuarios</h2>
+
+@(Html.DevExtreme().DataGrid<SaoDomingos.Web.Dev.Models.Usuario>()
+            .DataSource(d => d.Mvc()
+            .Controller("Usuario")
+            .LoadAction("ListaUsuarios")
+            .Key("Id")
+            )
+            .RemoteOperations(true)
+            .Columns(columns =>
+            {
+                columns.AddFor(m => m.Nome)
+                .Lookup(lookup => lookup
+                .DataSource(d => d.Mvc().Controller("Usuario").LoadAction("NomeLookUp").Key("Value"))
+                .ValueExpr("Value")
+                .DisplayExpr("Text")
+                );
+                columns.AddFor(m => m.Email);
+            })
+            .FilterRow(f=>f.Visible(true))
+            .HeaderFilter(f => f.Visible(true))
+            .GroupPanel(f => f.Visible(true))
+            .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
+            .Height(600)
+            .ShowBorders(true)
+            .Editing(e => e.AllowAdding(true).AllowDeleting(true).AllowUpdating(true))
+            .Grouping(g => g.AutoExpandAll(false))
+            .Summary(s => s
+            .TotalItems(totalItems =>
+            {
+            totalItems.AddFor(m => m.Nome).SummaryType(SummaryType.Count);
+            })
+            .GroupItems(groupItems =>
+            {
+            groupItems.AddFor(m => m.Nome).SummaryType(SummaryType.Count);
+
+            groupItems.Add().SummaryType(SummaryType.Count);
+        })
+    )
+
+    )

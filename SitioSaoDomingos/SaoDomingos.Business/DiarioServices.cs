@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace SaoDomingos.Business
 {
-    public class DiarioServices
-    {
+    public class DiarioServices 
+        {
         private readonly IUnitOfWork uow;
 
         public DiarioServices()

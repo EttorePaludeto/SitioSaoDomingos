@@ -11,7 +11,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaoDomingos.Business", "Sao
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaoDomingos.App.Consoles", "SaoDomingos.Console\SaoDomingos.App.Consoles.csproj", "{C720C8E6-CDD3-4B56-AF13-169CECCFF533}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaoDomingos.Web.App", "SaoDomingos.Web.App\SaoDomingos.Web.App.csproj", "{7881E69A-80B0-490B-B4F3-C90D6D8809E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaoDomingos.Wep", "SaoDomingos.Wep\SaoDomingos.Wep.csproj", "{29596D71-DE73-4392-96FE-3256D00DC698}"
+	ProjectSection(ProjectDependencies) = postProject
+		{89FB1E35-0D56-4F1D-B28E-A06FE517E86A} = {89FB1E35-0D56-4F1D-B28E-A06FE517E86A}
+		{7F8D2A43-412F-49BE-8302-D12E24ECD1FB} = {7F8D2A43-412F-49BE-8302-D12E24ECD1FB}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaoDomingos.Web.Dev", "DXApplication1\SaoDomingos.Web.Dev\SaoDomingos.Web.Dev.csproj", "{9F308BC7-EFA3-449A-9F9E-21630AB86924}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaoDomingos.Web.Dev.Mvc", "DXApplication4\SaoDomingos.Web.Dev.Mvc\SaoDomingos.Web.Dev.Mvc.csproj", "{F01564F2-D1D1-40ED-9790-15DE3141C33A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{89FB1E35-0D56-4F1D-B28E-A06FE517E86A} = {89FB1E35-0D56-4F1D-B28E-A06FE517E86A}
+		{501F68F8-272E-41BB-A6CC-8889F31A54D7} = {501F68F8-272E-41BB-A6CC-8889F31A54D7}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +47,18 @@ Global
 		{C720C8E6-CDD3-4B56-AF13-169CECCFF533}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C720C8E6-CDD3-4B56-AF13-169CECCFF533}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C720C8E6-CDD3-4B56-AF13-169CECCFF533}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7881E69A-80B0-490B-B4F3-C90D6D8809E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7881E69A-80B0-490B-B4F3-C90D6D8809E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7881E69A-80B0-490B-B4F3-C90D6D8809E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7881E69A-80B0-490B-B4F3-C90D6D8809E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29596D71-DE73-4392-96FE-3256D00DC698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29596D71-DE73-4392-96FE-3256D00DC698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29596D71-DE73-4392-96FE-3256D00DC698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29596D71-DE73-4392-96FE-3256D00DC698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F308BC7-EFA3-449A-9F9E-21630AB86924}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F308BC7-EFA3-449A-9F9E-21630AB86924}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F308BC7-EFA3-449A-9F9E-21630AB86924}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F308BC7-EFA3-449A-9F9E-21630AB86924}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F01564F2-D1D1-40ED-9790-15DE3141C33A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F01564F2-D1D1-40ED-9790-15DE3141C33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F01564F2-D1D1-40ED-9790-15DE3141C33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F01564F2-D1D1-40ED-9790-15DE3141C33A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

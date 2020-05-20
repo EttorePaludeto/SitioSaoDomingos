@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SaoDomingos.Web.Dev.Mvc.Models.Diario>
+@using SaoDomingos.Web.Dev.Mvc.Models
+@{
+    ViewData["Title"] = "Financeiro";
+    Layout = "~/Views/Shared/_LayoutMenu.cshtml";
+}
+
+<h2>Financeiro</h2>
+
+@(Html.DevExtreme().DataGrid<Diario>()
+        .DataSource(d => d.Mvc()
+        .Controller("Financeiro")
+        .LoadAction("GetDiario")
+        .Key("Id")
+        )
+        .RemoteOperations(true)
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.Id).Width(40);
+            columns.AddFor(m => m.Data).Format("dd/MM/yyyy");
+            columns.AddFor(m => m.Debito.Contabil);
+            columns.AddFor(m => m.Credito.Contabil);
+            columns.AddFor(m => m.Historico);
+            columns.AddFor(m => m.Valor).Format("R$ #,###.00");
+        })
+     .FilterRow(f => f.Visible(true))
+                .HeaderFilter(f => f.Visible(true))
+                .AllowColumnResizing(true)
+                .ColumnAutoWidth(true)
+                .ColumnHidingEnabled(true)
+            .GroupPanel(f => f.Visible(true))
+            .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
+            .Height("auto")
+            .ShowBorders(true)
+            .Editing(e => e.AllowAdding(true).AllowDeleting(true).AllowUpdating(true))
+            .Grouping(g => g.AutoExpandAll(false))
+            .Summary(s => s
+            .TotalItems(totalItems =>
+            {
+                totalItems.AddFor(m => m.Id).SummaryType(SummaryType.Count);
+            })
+            .GroupItems(groupItems =>
+            {
+                groupItems.AddFor(m => m.Valor).SummaryType(SummaryType.Sum);
+
+                groupItems.Add().SummaryType(SummaryType.Count);
+            })
+    )
+
+    )

@@ -1,0 +1,49 @@
+﻿
+
+@(Html.DevExtreme().Toolbar()
+    .ID("layout-toolbar")
+    .Items(itens=> {
+        itens.Add().Widget(w => w.Button().Icon("menu").OnClick("button_clickHandler")).Location(ToolbarItemLocation.Before);
+    })
+    )
+@(Html.DevExtreme().Drawer()
+        .ID("layout-drawer")
+        .MinSize(37)
+        .Height(250)
+        .Opened(new JS("JSON.parte(sessionStorage.getItem('isDrawerOpen'))"))
+        .RevealMode(DrawerRevealMode.Expand)
+        .OpenedStateMode(DrawerOpenedStateMode.Overlap)
+        .Template(@<text>
+        @(Html.DevExtreme().List()
+                .Width(200)
+                .OnInitialized("listOnInicialized")
+                .Items(itens => {
+                    itens.Add().Text("Financeiros").Icon("message");
+                    itens.Add().Text("Chuvas").Icon("check");
+                })
+                .KeyExpr("path")
+                .SelectionMode(ListSelectionMode.Single)
+                .OnSelectionChanged("list_onSelectionChanged")
+                )
+        </text>
+    )
+    .Content(@<text>@RenderBody()</text>)
+)
+
+<script type="text/javascript">
+    function button_clickHandler() {
+        const drawer = $("#layoutdrawer").dxDrawer("instance");
+        drawer.toggle();
+        sessionStorage.setItem("isDrawerOpen", JSON.stringify(drawer.option("opened")));
+    }
+
+    function list_onSelectionChanced(e) {
+        document.location.pathname = e.addedItens[0].path;
+        $("#layout-drawer").dxDrawer("hide");
+    }
+
+    function list_onInitialized(e) {
+        const t = "@Url.Action()";
+        e.component.option("selectedItemKeys", ["@Url.Action()"])
+    }
+</script>

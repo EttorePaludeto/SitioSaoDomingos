@@ -10,9 +10,8 @@
 
     <title>Sítio São Domingos</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+    <link href="~/css/Site.css" rel="stylesheet"/>
     <link href="~/css/devextreme/bootstrap.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
     <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
 
@@ -42,21 +41,19 @@
 
 <body>
 
-    <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-md">
-        <a class="navbar-brand" href="/">São Domingos</a>
-
+    <nav class="navbar navbar-light bg-transparent fixed-top navbar-expand-md">
+      
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link" style="font-size:20px;font-weight:600;color:white">Login</a></li>
             </ul>
         </div>
     </nav>
-
-    <main role="main" class="container">
+      <main role="main" class="container-fluid">
         @RenderBody()
     </main>
 </body>

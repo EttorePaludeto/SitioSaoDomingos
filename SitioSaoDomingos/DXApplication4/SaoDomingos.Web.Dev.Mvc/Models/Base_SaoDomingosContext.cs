@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+
 
 
 namespace SaoDomingos.Web.Dev.Mvc.Models
@@ -26,7 +28,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=ETTORENOTE\\SQLEXPRESS;Initial Catalog=Base_SaoDomingos;User ID=sa;Password=123456;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=Base_SaoDomingos;User ID=sa;Password=123456;Integrated Security=True;");
             }
         }
 

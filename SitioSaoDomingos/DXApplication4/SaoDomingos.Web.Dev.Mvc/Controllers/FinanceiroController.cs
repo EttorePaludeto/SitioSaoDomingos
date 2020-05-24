@@ -6,7 +6,10 @@ using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SaoDomingos.Web.Dev.Mvc.Models;
+using SaoDomingos.Web.Dev.Mvc.Models.ModelView;
 
 namespace SaoDomingos.Web.Dev.Mvc.Controllers
 {
@@ -25,84 +28,119 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
             return View();
         }
 
-        public object GetDiario(DataSourceLoadOptions loadOptions)
+        public object Pegar(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_ctx.Diario.ToList(), loadOptions);
+
+            var d = diarioview();
+            return DataSourceLoader.Load(d, loadOptions);
+            
         }
 
-        // GET: Financeiro/Details/5
-        public ActionResult Details(int id)
+        private List<DiarioView> diarioview()
+        {
+            List<Diario> dir = _ctx.Diario
+               .Include(c => c.Debito)
+               .Include(d=> d.Credito)
+               .ToList();
+
+            List<DiarioView> dirView = new List<DiarioView>();
+
+            foreach (var item in dir)
+            {
+                DiarioView itemView = new DiarioView(item);
+                dirView.Add(itemView);
+            }
+
+            return dirView;
+        }
+
+
+
+
+    public object GetDiario(DataSourceLoadOptions loadOptions)
+    {
+        var dir = _ctx.Diario.FromSqlRaw(
+             @"select d.id, d.Data, d.Historico, d.Valor, deb.Contabil, cre.Contabil
+                 from diario as d inner join PlanoContas as deb on d.DebitoId = deb.Id  
+                inner join PlanoContas as cre on d.CreditoId = cre.Id");
+
+
+        return DataSourceLoader.Load(dir, loadOptions);
+    }
+
+    // GET: Financeiro/Details/5
+    public ActionResult Details(int id)
+    {
+        return View();
+    }
+
+    // GET: Financeiro/Create
+    public ActionResult Adicionar()
+    {
+        return View();
+    }
+
+    // POST: Financeiro/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Adicionar(IFormCollection collection)
+    {
+        try
+        {
+            // TODO: Add insert logic here
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch
         {
             return View();
-        }
-
-        // GET: Financeiro/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Financeiro/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Financeiro/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Financeiro/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Financeiro/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Financeiro/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
+
+    // GET: Financeiro/Edit/5
+    public ActionResult Edit(int id)
+    {
+        return View();
+    }
+
+    // POST: Financeiro/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Edit(int id, IFormCollection collection)
+    {
+        try
+        {
+            // TODO: Add update logic here
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch
+        {
+            return View();
+        }
+    }
+
+    // GET: Financeiro/Delete/5
+    public ActionResult Delete(int id)
+    {
+        return View();
+    }
+
+    // POST: Financeiro/Delete/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Delete(int id, IFormCollection collection)
+    {
+        try
+        {
+            // TODO: Add delete logic here
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch
+        {
+            return View();
+        }
+    }
+}
 }

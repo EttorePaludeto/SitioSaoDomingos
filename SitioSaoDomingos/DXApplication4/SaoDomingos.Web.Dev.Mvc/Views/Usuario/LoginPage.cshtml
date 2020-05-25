@@ -4,46 +4,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    span {
-        color: red;
-        float: left;
-        margin-top: 1%;
-        margin-left: 1%;
-    }
-</style>
 
-
-<br>
-<center>
-    <h1 style="color:white">Dados Login</h1>
-    <br>
-    <br>
-    @using (Html.BeginForm())
-    {
-        @Html.ValidationSummary(true)
-
-        <fieldset style="width: 40%;">
-            <br />
-            <input type="text" class="form-control" name="Nome" placeholder="Digite seu login" />
-            @Html.ValidationMessageFor(model => model.Nome)
-            <br />
-            <br />
-            <br />
-            <input type="password" class="form-control" name="Senha" placeholder="Digite sua senha" />
-            @Html.ValidationMessageFor(model => model.Senha)
-            <br />
-            <br />
-            <br />
-            <button type="submit" class="btn btn-primary" style="background-color: mediumseagreen; border: none;">Logar</button>
-            <br /><br /><br />
-
-            @if (ViewBag.Erro != null)
-            {
-                <h3 style="padding: 20px; color: white; background-color: dimgray">
-                    @ViewBag.Erro
-                </h3>
-            }
-        </fieldset>
-    }
-</center>
+    <div class="container mt-5">      
+        <form asp-controller="Usuario" asp-action="LoginPage">
+            <div class="border rounded p-4">
+                <h1 style="color:white">Dados Login</h1>
+                <div class="form-group">
+                    <input type="text" class="form-control" asp-for="Nome" placeholder="Nome" />
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" asp-for="Senha" placeholder="Senha" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Logar</button>
+                </div>
+            </div>
+        </form>
+      
+    </div>      

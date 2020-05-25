@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -26,10 +27,10 @@ namespace SaoDomingos.Web.Dev.Mvc.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=Base_SaoDomingos;User ID=sa;Password=123456;Integrated Security=True;");
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //  optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=Base_SaoDomingos;User ID=sa;Password=123456;Integrated Security=true;");
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

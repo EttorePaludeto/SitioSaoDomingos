@@ -16,12 +16,7 @@
             .RemoteOperations(true)
             .Columns(columns =>
             {
-                columns.AddFor(m => m.Nome)
-                .Lookup(lookup => lookup
-                .DataSource(d => d.Mvc().Controller("Usuario").LoadAction("NomeLookUp").Key("Value"))
-                .ValueExpr("Value")
-                .DisplayExpr("Text")
-                );
+                columns.AddFor(m => m.Nome);
                 columns.AddFor(m => m.Email);
             })
             .FilterRow(f=>f.Visible(true))

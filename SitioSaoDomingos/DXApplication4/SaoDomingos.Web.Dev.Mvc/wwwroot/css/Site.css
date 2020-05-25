@@ -1,9 +1,9 @@
 ﻿
 
-body {
-    background-image: url(../image/FotoCapa.webp);
+.bodyInicio {
+    background-image: url(../image/CapaSiteSitio.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment:fixed;
-    background-size: cover;
+    background-size:cover;
 }

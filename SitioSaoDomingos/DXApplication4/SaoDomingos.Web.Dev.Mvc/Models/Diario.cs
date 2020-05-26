@@ -28,5 +28,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Models
         public  PlanoContas Debito { get; set; }
         public  Participante Participante { get; set; }
         public  Usuario Usuario { get; set; }
+
+       
     }
 }

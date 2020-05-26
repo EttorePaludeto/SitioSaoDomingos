@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
 
-<h2>Financeiro-10</h2>
-
-<a asp-action="Adicionar">AddNew</a>
+<h2>@ViewData["Title"]</h2>
 
 @(Html.DevExtreme().DataGrid<DiarioView>()
         .ID("gridContainer")
@@ -16,8 +14,12 @@
         .Paging(p => p.Enabled(false))
         .Editing(e => e.Mode(GridEditMode.Popup)
             .AllowUpdating(true)
+            .AllowDeleting(true)
+            .AllowAdding(true)
             .Popup(p => p
-                .Title("Financeiro Info")
+                .Title("Financeiro Infos")
+                .Width("auto")
+                .Height("auto")
                 .ShowTitle(true)
                 .Position(pos => pos
                     .My(HorizontalAlignment.Center, VerticalAlignment.Top)
@@ -27,36 +29,66 @@
             )
             .Form(f => f.Items(items => {
                 items.AddGroup()
-                    .ColCount(2)
+                    .ColCount(3)
                     .ColSpan(2)
                     .Items(groupItems => {
                         groupItems.AddSimpleFor(m => m.DebitoId)
-                         .ColSpan(2);
+                        .ColSpan(3) 
+                        .Label(c => c
+                            .Text("Débito")
+                            .Location(FormLabelLocation.Top));
                         groupItems.AddSimpleFor(m => m.CreditoId)
-                         .ColSpan(2);
+                        .ColSpan(3)
+                        .Label(c => c
+                            .Text("Crédito")
+                            .Location(FormLabelLocation.Top));
                         groupItems.AddSimpleFor(m => m.ParticipanteId)
-                         .ColSpan(2);
-                        groupItems.AddSimpleFor(m => m.Id).Visible(false);
-                        groupItems.AddSimpleFor(m => m.Data);
-                        groupItems.AddSimpleFor(m => m.Valor);
+                         .ColSpan(3)
+                        .Label(c => c
+                            .Text("Participante")
+                            .Location(FormLabelLocation.Top));
+                        groupItems.AddSimpleFor(m => m.Data)
+                        .ColSpan(1)
+                         .Label(c => c
+                            .Text("Data")
+                            .Location(FormLabelLocation.Top));
+                        groupItems.AddSimpleFor(m => m.Valor)
+                        .ColSpan(2)
+                        .Label(c => c
+                            .Text("Valor")
+                            .Location(FormLabelLocation.Top))
+                        .Editor(c=>c
+                            .NumberBox()
+                            .Format("R$ #,###.00"));
                         groupItems.AddSimpleFor(m => m.Historico)
-                            .ColSpan(2)
-                            .Editor(editor => editor.TextArea().Height(100));
-                    });
-
-                items.AddGroup()
-                    .Caption("Dados Históricos")
-                    .ColCount(2)
-                    .ColSpan(2)
-                    .Items(groupItems => {
-                        groupItems.AddSimpleFor(m => m.DataCadastro);
-                        groupItems.AddSimpleFor(m => m.usuarios);
+                         .ColSpan(3)
+                         .Label(c => c
+                            .Text("Histórico")
+                            .Location(FormLabelLocation.Top))
+                            .Editor(c => c
+                                .TextArea()
+                                .Height(100));
+                        groupItems.AddSimpleFor(m => m.Id)
+                        .Editor(c => c
+                            .TextBox().Disabled(true))
+                        .Label(c => c
+                            .Location(FormLabelLocation.Top));
+                        groupItems.AddSimpleFor(m => m.DataCadastro)
+                        .Editor(c => c
+                            .DateBox().Disabled(true))
+                        .Label(c => c
+                            .Location(FormLabelLocation.Top));
+                        groupItems.AddSimpleFor(m => m.usuarios)
+                        .Editor(c => c
+                            .TextBox().Disabled(true))
+                        .Label(c => c
+                            .Location(FormLabelLocation.Top));
                     });
             }))
         )
         .Columns(columns => {
-            columns.AddFor(m => m.Id).Visible(true);
-            columns.AddFor(m => m.DataCadastro).Visible(false);
+            columns.AddFor(m => m.Id).Visible(false);
+            columns.AddFor(m => m.DataCadastro).Visible(false).Format("dd/MM/yyyy HH:mm");
             columns.AddFor(m => m.usuarios).Visible(false);
             columns.AddFor(m => m.Data).Format("dd/MM/yyyy");
             columns.AddFor(m => m.debitos);
@@ -87,10 +119,13 @@
             .Controller("Financeiro")
             .LoadAction("Pegar")
             .UpdateAction("Edit").Key("Id")
+            .DeleteAction("Delete").Key("Id")
+            .InsertAction("Adicionar").Key("Id")
             .Key("Id")
         )
          .FilterRow(f => f.Visible(true))
          .HeaderFilter(f => f.Visible(true))
+         .AllowColumnReordering(true)
          .AllowColumnResizing(true)
          .ColumnAutoWidth(true)
          .ColumnHidingEnabled(true)
@@ -107,79 +142,3 @@
              groupItems.Add().SummaryType(SummaryType.Count);
          }))
     )
-@*@(Html.DevExtreme().DataGrid<DiarioView>()
-    .DataSource(d => d.Mvc()
-    .Controller("Financeiro")
-    .LoadAction("Pegar")
-    .UpdateAction("Pegar")
-    .Key("Id")
-    )
-    .RowAlternationEnabled(true)
-    .Editing(e => e.Mode(GridEditMode.Popup)
-        .AllowUpdating(true)
-        .Popup(p => p
-            .Title("Financeiro Infos")
-            .ShowTitle(true)
-            .Width(700)
-            .Height(525)
-            .Position(pos => pos
-                .My(HorizontalAlignment.Center, VerticalAlignment.Top)
-                .At(HorizontalAlignment.Center, VerticalAlignment.Top)
-                .Of(new JS("windown"))
-                )
-            )
-        .Form(f => f.Items(items =>
-        {
-            items.AddGroup()
-                .ColCount(2)
-                .ColSpan(2)
-                .Items(groupItem =>
-                {
-                    groupItem.AddSimpleFor(m => m.Id);
-                    groupItem.AddSimpleFor(m => m.Data);
-                    groupItem.AddSimpleFor(m => m.DebitoId);
-                    groupItem.AddSimpleFor(m => m.CreditoId);
-                    groupItem.AddSimpleFor(m => m.ParticipanteId);
-                    groupItem.AddSimpleFor(m => m.Historico)
-                        .ColSpan(2)
-                        .Editor(editor => editor.TextArea().Height(10));
-                    groupItem.AddSimpleFor(m => m.Valor);
-                });
-        }))
-        )
-    .Columns(columns =>
-    {
-        columns.AddFor(m => m.Id).Visible(false);
-        columns.AddFor(m => m.Data).Format("dd/MM/yyyy");
-        columns.AddFor(m => m.debitos);
-        columns.AddFor(m => m.creditos);
-        columns.AddFor(m => m.Historico);
-        columns.AddFor(m => m.participantes);
-        columns.AddFor(m => m.Valor).Format("R$ #,###.00");
-        columns.AddFor(m => m.DebitoId).Visible(false)
-            .Lookup(lk=>lk
-            .DataSource(d=>d.Mvc().Controller("Financeiro").LoadAction("DataGridLookUpPlanoContas").Key("Id"))
-            .DisplayExpr("Contabil")
-            .ValueExpr("Id")
-            );
-    })
-    .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
-    .AllowColumnResizing(true)
-    .ColumnAutoWidth(true)
-    .ColumnHidingEnabled(true)
-    .GroupPanel(f => f.Visible(true))
-    .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
-    .Height("auto")
-    .ShowBorders(true)
-    .Grouping(g => g.AutoExpandAll(false))
-    .Summary(s => s
-    .TotalItems(totalItems =>
-    {
-        totalItems.AddFor(m => m.Id).SummaryType(SummaryType.Count);
-    })
-    .GroupItems(groupItems =>{
-        groupItems.AddFor(m => m.Valor).SummaryType(SummaryType.Sum);
-        groupItems.Add().SummaryType(SummaryType.Count);
-    }))
-    )*@

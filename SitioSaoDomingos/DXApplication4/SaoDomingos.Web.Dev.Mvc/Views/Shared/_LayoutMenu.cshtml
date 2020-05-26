@@ -32,7 +32,7 @@
 
     @* JSZip for client side export *@
     @*<script src="~/js/devextreme/jszip.js"></script>*@
-    
+
     <script src="~/js/devextreme/dx.all.js"></script>
     <script src="~/js/devextreme/vectormap-data/world.js"></script>
     <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
@@ -41,28 +41,38 @@
 </head>
 
 <body>
+    <header>
+        <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-md">
+            <a class="navbar-brand" href="/">São Domingos</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-md">
-        <a class="navbar-brand" href="/">São Domingos</a>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a href="~/Financeiro/Index" class="nav-link">Financeiro</a></li>
+                    <li class="nav-item"><a asp-controller="Participante" asp-action="Index" class="nav-link">Participantes</a></li>
+                    <li class="nav-item"><a asp-controller="Resultado" asp-action="Index" class="nav-link">Resultados</a></li>
+                    <li class="nav-item"><a href="#Balanços" class="nav-link disabled">Balanço</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="~/Usuario/LoginPage">Login</a>
+                            <a class="dropdown-item disabled" href="#">Meus Dados</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Usuario" asp-action="LogOut">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link">Login</a></li>
-                <li class="nav-item"><a href="~/Financeiro/Index" class="nav-link">Financeiro</a></li>
-                <li class="nav-item"><a href="#Participantes" class="nav-link">Participantes</a></li>
-                <li class="nav-item"><a href="#Resultados" class="nav-link">Resultados</a></li>
-                <li class="nav-item"><a href="#Balanços" class="nav-link">Balanço</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <main class="container-fluid mt-5" >
+    </header>
+    <main class="container-fluid" style="margin-top:70px">
         @RenderBody()
     </main>
+
+
 </body>
 
 </html>

@@ -26,7 +26,8 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("GridUsuarios");
+                //return RedirectToAction("GridUsuarios");
+                return RedirectToAction("PageMain");
             }
 
             return View();
@@ -45,7 +46,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
                     if (usuarioBD != null)
                     {
                         Login(usuarioBD);
-                        return RedirectToAction("GridUsuarios");
+                        return RedirectToAction("PageMain");
                     }
                     else
                     {
@@ -66,7 +67,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, usuario.Nome),
+                new Claim(ClaimTypes.Name, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Role, "Usuario_Comum")
             };
 
@@ -89,38 +90,15 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
             return RedirectToAction("LoginPage");
         }
 
-
         [Authorize]
         public IActionResult PageMain()
         {
-            return View();
+            return RedirectToAction("BemVindo", "Home");
         }
 
-        [Authorize]
-        public IActionResult GridUsuarios()
-        {
-            return View(_ctx.Usuario);
-        }
+      
 
-        public object ListaUsuarios(DataSourceLoadOptions loadOptions)
-        {
-            return DataSourceLoader.Load(_ctx.Usuario, loadOptions);
-        }
-
-        [HttpGet]
-        public object NomeLookUp(DataSourceLoadOptions loadOptions)
-        {
-            var lookup = from i in _ctx.Usuario
-                         let text = i.Nome + " (" + i.Email + ")"
-                         orderby i.Nome
-                         select new
-                         {
-                             Value = i.Id,
-                             Text = text
-                         };
-
-            return DataSourceLoader.Load(lookup, loadOptions);
-        }
+    
 
 
     }

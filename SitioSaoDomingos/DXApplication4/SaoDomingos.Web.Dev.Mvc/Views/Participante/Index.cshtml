@@ -1,0 +1,72 @@
+﻿@model List<SaoDomingos.Web.Dev.Mvc.Models.Participante>
+@using SaoDomingos.Web.Dev.Mvc.Models
+@{
+    ViewData["Title"] = "Participante";
+    Layout = "~/Views/Shared/_LayoutMenu.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@(Html.DevExtreme().DataGrid<Participante>()
+        .ID("gridContainer")
+        .RowAlternationEnabled(true)
+        .ShowBorders(true)
+        .Paging(p => p.Enabled(false))
+        .Editing(e => e.Mode(GridEditMode.Popup)
+            .AllowUpdating(true)
+            .AllowDeleting(true)
+            .AllowAdding(true)
+            .Popup(p => p
+                .Title("Participantes Infos")
+                .ShowTitle(true)
+                .Position(pos => pos
+                    .My(HorizontalAlignment.Center, VerticalAlignment.Top)
+                    .At(HorizontalAlignment.Center, VerticalAlignment.Top)
+                    .Of(new JS("window"))
+                )
+            )
+            .Form(f => f.Items(items => {
+                items.AddGroup()
+                    .Items(groupItems => {
+                        groupItems.AddSimpleFor(m => m.Id)
+                        .Label(c => c
+                            .Text("Id")
+                            .Location(FormLabelLocation.Top))
+                            .Editor(c=>c.TextBox().Disabled(true));
+                        groupItems.AddSimpleFor(m => m.Nome)
+                        .Label(c => c
+                            .Text("Nome")
+                            .Location(FormLabelLocation.Top));
+                    });
+            }))
+        )
+        .Columns(columns => {
+            columns.AddFor(m => m.Nome);
+            columns.AddFor(m => m.Id).Width(100);
+        })
+        .DataSource(d => d.Mvc()
+            .Controller("Participante")
+            .LoadAction("GetAll")
+            .UpdateAction("Edit").Key("Id")
+            .DeleteAction("Delete").Key("Id")
+            .InsertAction("Insert").Key("Id")
+            .Key("Id")
+        )
+         .FilterRow(f => f.Visible(true))
+         .HeaderFilter(f => f.Visible(true))
+         .AllowColumnReordering(true)
+         .AllowColumnResizing(true)
+         .ColumnAutoWidth(true)
+         .ColumnHidingEnabled(true)
+         .GroupPanel(f => f.Visible(true))
+         .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
+         .Height("auto")
+         .ShowBorders(true)
+         .Grouping(g => g.AutoExpandAll(false))
+         .Summary(s => s
+         .TotalItems(totalItems =>{
+             totalItems.AddFor(m => m.Id).SummaryType(SummaryType.Count);})
+         .GroupItems(groupItems =>{
+             groupItems.Add().SummaryType(SummaryType.Count);
+         }))
+    )

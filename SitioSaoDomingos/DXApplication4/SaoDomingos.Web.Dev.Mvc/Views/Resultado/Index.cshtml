@@ -1,0 +1,48 @@
+﻿@model List<SaoDomingos.Web.Dev.Mvc.Models.ModelView.DiarioView>
+@using SaoDomingos.Web.Dev.Mvc.Models.ModelView
+@{
+    ViewData["Title"] = "Resultados";
+    Layout = "~/Views/Shared/_LayoutMenu.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@(Html.DevExtreme().PivotGrid<DiarioView>
+    ()
+    .ID("pivotgrid")
+    .AllowSortingBySummary(true)
+    .AllowFiltering(true)
+    .ShowBorders(true)
+    .ShowColumnGrandTotals(false)
+    .ShowRowGrandTotals(false)
+    .ShowRowTotals(false)
+    .ShowColumnTotals(false)
+    .FieldChooser(c => c.Enabled(true).Height(400))
+    .DataSource(d => d
+    .Store(s => s.Mvc().Controller("Resultado").LoadAction("GetAll"))
+    .Fields(fields => {
+    fields.AddFor(m => m.participantes)
+    .Width(200)
+    .Area(PivotGridArea.Row)
+    .SortBySummaryField("Total");
+
+    fields.AddFor(m => m.debitos)
+    .Width(300)
+    .Area(PivotGridArea.Row);
+
+    fields.AddFor(m => m.Data)
+    .Area(PivotGridArea.Column);
+
+    fields.Add()
+    .GroupName("Data")
+    .GroupInterval(PivotGridGroupInterval.Year)
+    .Visible(true);
+
+    fields.AddFor(m => m.Valor)
+    .SummaryType(SummaryType.Sum)
+    .Format("R$ #,###.00")
+    .Area(PivotGridArea.Data);
+    })
+    )
+    )
+

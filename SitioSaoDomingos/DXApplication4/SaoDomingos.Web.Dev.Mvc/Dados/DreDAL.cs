@@ -53,7 +53,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
             return @"DECLARE @DT_INI AS DATE
             DECLARE @DT_FIM AS DATE
             SET @DT_INI = '2019-01-01'
-            SET @DT_FIM = '2018-01-31'
+            SET @DT_FIM = '2019-01-31'
             SELECT D.DRE, D.Financeiro, D.Economico, D.Contabil, SUM(VALOR) AS Valor  FROM 
             (
             select p.DRE, p.Financeiro, p.Economico, p.Contabil, SUM(d.valor)* -1 as Valor from diario as d inner join PlanoContas as p on d.DebitoId = p.Id

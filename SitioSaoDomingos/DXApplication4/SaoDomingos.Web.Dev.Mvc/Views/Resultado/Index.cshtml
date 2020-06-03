@@ -1,63 +1,116 @@
 ﻿@model List<SaoDomingos.Web.Dev.Mvc.Dados.DreDAL>
 @using SaoDomingos.Web.Dev.Mvc.Dados
+
 @{
     ViewData["Title"] = "Resultados";
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
 
-@(Html.DevExtreme().PivotGrid<DreDAL>
-    ()
-    .ID("pivotgrid")
-    .AllowSortingBySummary(true)
-    .AllowExpandAll(true)
-    .AllowFiltering(true)
-    .ShowBorders(true)
-    .ShowColumnGrandTotals(true)
-    .ShowRowGrandTotals(true)
-    .ShowRowTotals(true)
-    .ShowColumnTotals(true)
-    .FieldPanel(p=> p
-        .ShowColumnFields(true)
-        .ShowDataFields(true)
-        .ShowFilterFields(true)
-        .ShowRowFields(true)
-        .AllowFieldDragging(true)
-        .Visible(true)
-    )
-    .HeaderFilter(h => h
-        .AllowSearch(true)
-        .ShowRelevantValues(true)
-        .Width(300)
-        .Height(400)
-    )
 
-    .FieldChooser(c => c.Enabled(true).Height(400))
-    .DataSource(d => d
-    .Store(s => s.Mvc().Controller("Resultado").LoadAction("GetAll"))
-    .Fields(fields => {
-        fields.AddFor(m => m.DRE)
-        .Area(PivotGridArea.Row)
-        .WordWrapEnabled(true)
-        .Expanded(true);
-        fields.AddFor(m => m.Financeiro)
-        .WordWrapEnabled(true)
-        .Area(PivotGridArea.Row)
-        .Expanded(true);
-        fields.AddFor(m => m.Economico)
-        .WordWrapEnabled(true)
-        .Area(PivotGridArea.Row)
-        .Expanded(true);
-        fields.AddFor(m => m.Contabil)
-        .Width(300)
-        .WordWrapEnabled(true)
-        .Area(PivotGridArea.Row)
-        .Expanded(true);
-        fields.AddFor(m => m.Valor)
-        .SummaryType(SummaryType.Sum)
-        .Format("R$ #,###.00")
-        .Area(PivotGridArea.Data);
-    })
-    )
-    )
+        <nav class="navbar navbar-expand navbar-light bg-light">
+
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(DateTime.Now))</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now.AddMonths(1).AddDays(-1)))</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link"><input class="btn btn-primary" name="btnIr" id="btnIr" value="Ir !" onclick="reloadData()" type="submit" /></div>
+                </li>
+            </ul>
+        </nav>
+   
+<div class="container-fluid" id="pivotgrid"></div>
+
+<script type="text/javascript">
+      
+
+    function reloadData() {
+        var dataInicial = $("#DtIni").dxDateBox("instance").option('value')
+        var dataFinal = $("#DtFim").dxDateBox("instance").option('value')
+        var dataLimite = new Date(dataInicial.getFullYear() + 1, dataInicial.getMonth(), dataInicial.getDay());
+
+        if (dataInicial > dataFinal) {
+            alert('A data inicial é maior que a final');
+            return;
+        }
+
+        if (dataFinal > dataLimite) {
+            alert('Intervalo máximo permitido é de 1 ano');
+            return;
+        }
+
+        var dtIni = $("#DtIni").dxDateBox("instance").option('value').toLocaleDateString();
+        var dtFim = $("#DtFim").dxDateBox("instance").option('value').toLocaleDateString();
+       
+        var salesPivotGrid = $("#pivotgrid").dxPivotGrid({
+            allowExpandAll: true,
+            allowSortingBySummary: true,
+            allowSorting: true,
+            allowFiltering: true,
+            showColumnGrandTotals: true,
+            showRowGrandTotals:true,
+            showRowTotals: true,
+            wordWrapEnable: true,
+            width: undefined,
+            showColumnTotals: true,
+            headerFilter: {
+                allowSearch: true,
+                showRelevantValues: true,
+            },
+            showBorders: true,
+            fieldPanel: {
+                showColumnFields: true,
+                showDataFields: true,
+                showFilterFields: true,
+                showRowFields: true,
+                allowFieldDragging: true,
+                visible: true
+            },
+            fieldChooser: {
+                allowSearch: true
+            },
+            dataSource: {
+                fields: [{
+                    caption: "DRE",
+                    dataField: "DRE",
+                    area: "row"
+                }, {
+                    caption: "Financeiro",
+                    dataField: "Financeiro",
+                    area: "filter"
+                },{
+                    caption: "Economico",
+                    dataField: "Economico",
+                        area: "filter"
+                },{
+                    caption: "Contabil",
+                    dataField: "Contabil",
+                        area: "filter"
+                },{
+                     dataField: "Valor",
+                     dataType: "number",
+                     summaryType: "sum",
+                     format: "R$ #,###.00",
+                     area: "data"
+        }],
+            store: {
+            type: "odata",
+            name: "DreDAL",
+                url: "Resultado/Get",
+                deserializeDates: true,
+                beforeSend: function (e) {
+                e.params = {
+                    "DtIni": dtIni,
+                    "DtFim": dtFim
+                };
+            }
+        }
+              }
+           }).dxPivotGrid("instance");
+            
+    }
+</script>

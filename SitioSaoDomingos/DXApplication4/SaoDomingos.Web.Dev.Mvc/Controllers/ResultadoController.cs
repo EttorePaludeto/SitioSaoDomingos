@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using SaoDomingos.Web.Dev.Mvc.Dados;
 using SaoDomingos.Web.Dev.Mvc.Models;
 using SaoDomingos.Web.Dev.Mvc.Models.ModelView;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,11 +26,24 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
             return View();
         }
 
-        [HttpGet]
-        public object GetAll(DataSourceLoadOptions loadOptions)
+       // [HttpGet]
+        //public object GetByDate(DataSourceLoadOptions loadOptions, string DtIni, string DtFim)
+        //{
+        // //  return Get(loadOptions, DtIni, DtFim);
+        //}
+
+        //[HttpPost]
+        //public object GetByDateP(DataSourceLoadOptions loadOptions, string DtIni, string DtFim)
+        //{
+        // //   return Get(loadOptions, DtIni, DtFim);
+        //}
+
+
+        public object Get(DataSourceLoadOptions loadOptions, string DtIni, string DtFim)
         {
+            
             DreDAL dre = new DreDAL();
-            var dirView = dre.GetbyData();
+            var dirView = dre.GetbyData(DtIni, DtFim);
 
             return DataSourceLoader.Load(dirView, loadOptions);
         }

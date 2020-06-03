@@ -24,12 +24,12 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
         }
 
 
-        public IEnumerable<DreDAL> GetbyData()
+        public IEnumerable<DreDAL> GetbyData(string DtIni, string DtFim)
         {
             List<DreDAL> lista = new List<DreDAL>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand(SQL(), con);
+                SqlCommand cmd = new SqlCommand(SQL(DtIni, DtFim), con);
                 cmd.CommandType = CommandType.Text;
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -48,12 +48,14 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
             return lista;
         }
 
-        private string SQL()
+        private string SQL(string DtIni, string DtFim)
         {
-            return @"DECLARE @DT_INI AS DATE
+
+
+            return $@"DECLARE @DT_INI AS DATE
             DECLARE @DT_FIM AS DATE
-            SET @DT_INI = '2019-01-01'
-            SET @DT_FIM = '2019-01-31'
+            SET @DT_INI = '{DtIni}'
+            SET @DT_FIM = '{DtFim}'
             SELECT D.DRE, D.Financeiro, D.Economico, D.Contabil, SUM(VALOR) AS Valor  FROM 
             (
             select p.DRE, p.Financeiro, p.Economico, p.Contabil, SUM(d.valor)* -1 as Valor from diario as d inner join PlanoContas as p on d.DebitoId = p.Id
@@ -65,8 +67,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
             group by p.DRE, p.Financeiro, p.Economico, p.Contabil
             ) AS D
             GROUP BY D.DRE, D.Financeiro, D.Economico, D.Contabil
-            HAVING D.DRE <> 'RESULTADO'
-";
+            HAVING D.DRE <> 'RESULTADO'";
         }
     }
 }

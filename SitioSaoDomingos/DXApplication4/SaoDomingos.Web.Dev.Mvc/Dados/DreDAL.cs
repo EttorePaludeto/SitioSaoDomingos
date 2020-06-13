@@ -17,17 +17,18 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
         public decimal Valor { get; set; }
 
         private string connectionString { get; }
+        private readonly ADOContext _ctx;
 
-        public DreDAL()
+        public DreDAL(ADOContext context)
         {
-            connectionString = "Data Source =.\\SQLEXPRESS; Initial Catalog = Base_SaoDomingos; User ID = sa; Password = 123456;";
+            _ctx = context;
         }
 
 
         public IEnumerable<DreDAL> GetbyData(string DtIni, string DtFim)
         {
             List<DreDAL> lista = new List<DreDAL>();
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(_ctx.connString))
             {
                 SqlCommand cmd = new SqlCommand(SQL(DtIni, DtFim), con);
                 cmd.CommandType = CommandType.Text;
@@ -35,7 +36,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    DreDAL obj = new DreDAL();
+                    DreDAL obj = new DreDAL(_ctx);
                     obj.DRE = rdr["DRE"].ToString();
                     obj.Financeiro = rdr["Financeiro"].ToString();
                     obj.Economico = rdr["Economico"].ToString();

@@ -5,7 +5,6 @@ DECLARE @CONTA AS VARCHAR(5)
 SET @DT_INI = '2019-12-01'
 SET @DT_FIM = '2019-12-31'
 SET @CONTA = '10001'
-
 SELECT *, ROW_NUMBER() OVER (ORDER BY d.Data) as Ordem  INTO SALDO FROM 
 	(select d.Id, d.Data, p.Contabil, d.Historico, d.valor * -1 as Valor, 'C' As Natureza from diario as d inner join PlanoContas as p on d.DebitoId = p.Id
 	where d.Data between @DT_INI and @DT_FIM AND CreditoId = @CONTA
@@ -25,7 +24,6 @@ SELECT *, ROW_NUMBER() OVER (ORDER BY d.Data) as Ordem  INTO SALDO FROM
 SELECT S1.Id, S1.Data, S1.Contabil, S1.Historico, S1.Valor, SUM(S2.Valor) as Saldo, S1.Ordem FROM SALDO AS S1 INNER JOIN SALDO AS S2 ON S1.Ordem >= S2.Ordem
 Group By S1.Id, S1.Data, S1.Contabil, S1.Historico, S1.Valor, S1.Ordem
 Order By S1.Ordem
-
 DROP TABLE SALDO
 
 

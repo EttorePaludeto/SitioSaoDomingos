@@ -15,9 +15,11 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
     public class ResultadoController : Controller
     {
         private readonly Base_SaoDomingosContext _ctx;
+        private readonly ADOContext _ctxADO;
 
-        public ResultadoController(Base_SaoDomingosContext context)
+        public ResultadoController(Base_SaoDomingosContext context, ADOContext ctxADO)
         {
+            _ctxADO = ctxADO;
             _ctx = context;
         }
 
@@ -26,25 +28,10 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
             return View();
         }
 
-       // [HttpGet]
-        //public object GetByDate(DataSourceLoadOptions loadOptions, string DtIni, string DtFim)
-        //{
-        // //  return Get(loadOptions, DtIni, DtFim);
-        //}
-
-        //[HttpPost]
-        //public object GetByDateP(DataSourceLoadOptions loadOptions, string DtIni, string DtFim)
-        //{
-        // //   return Get(loadOptions, DtIni, DtFim);
-        //}
-
-
         public object Get(DataSourceLoadOptions loadOptions, string DtIni, string DtFim)
-        {
-            
-            DreDAL dre = new DreDAL();
+        {   
+            DreDAL dre = new DreDAL(_ctxADO);
             var dirView = dre.GetbyData(DtIni, DtFim);
-
             return DataSourceLoader.Load(dirView, loadOptions);
         }
     }     

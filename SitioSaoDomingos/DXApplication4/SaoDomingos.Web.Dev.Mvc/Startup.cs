@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using SaoDomingos.Web.Dev.Mvc.Dados;
 using SaoDomingos.Web.Dev.Mvc.Models;
 
 namespace SaoDomingos_Web_Dev_Mvc
@@ -36,6 +37,8 @@ namespace SaoDomingos_Web_Dev_Mvc
 
             services.AddDbContext<Base_SaoDomingosContext>(o =>
                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ADOContext>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

@@ -10,7 +10,7 @@
 
     <title>Sítio São Domingos</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <link href="~/css/Site.css" rel="stylesheet"/>
+    <link href="~/css/Site.css" rel="stylesheet" />
     <link href="~/css/devextreme/bootstrap.css" rel="stylesheet" />
     <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
     <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
@@ -31,7 +31,7 @@
 
     @* JSZip for client side export *@
     @*<script src="~/js/devextreme/jszip.js"></script>*@
-    
+
     <script src="~/js/devextreme/dx.all.js"></script>
     <script src="~/js/devextreme/vectormap-data/world.js"></script>
     <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
@@ -39,22 +39,30 @@
 
 </head>
 
-<body class="bodyInicio">
-    <nav class="navbar navbar-light bg-transparent fixed-top navbar-expand-md">
-      
-        <button type="button" class="navbar-toggler bg-light" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <body class="bodyInicio">
 
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link" style="font-size:20px;font-weight:600;color:white">Login</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main role="main" class="container-fluid">
-        @RenderBody()
-    </main>
+       
+
+            <nav class="navbar navbar-light bg-transparent fixed-top navbar-expand-md">
+
+                <button type="button" class="navbar-toggler bg-light" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link" style="font-size:20px;font-weight:600;color:white">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+      
+
+            @RenderBody()
+        
+       
+
 </body>
+
 
 </html>

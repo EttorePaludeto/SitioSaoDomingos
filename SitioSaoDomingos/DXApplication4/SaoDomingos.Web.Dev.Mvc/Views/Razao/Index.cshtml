@@ -1,0 +1,102 @@
+﻿@model IEnumerable<SaoDomingos.Web.Dev.Mvc.Dados.RazaoDAL>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMenu.cshtml";
+}
+
+<nav class="navbar navbar-light bg-transparent navbar-expand-md">
+
+    <button type="button" class="navbar-toggler bg-light" data-toggle="collapse" data-target="#navSubar" aria-expanded="false" aria-controls="navbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navSubar" class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(DateTime.Now))</div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now.AddMonths(1).AddDays(-1)))</div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link"> @(Html.DevExtreme().SelectBox().ID("cmbConta").DataSource(d => d.Mvc().LoadAction("GetContas").Key("Id")).DisplayExpr("Contabil").ValueExpr("Id").SearchEnabled(true).Width(400))</div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link"><input class="btn btn-primary" name="btnIr" id="btnIr" value="Ir !" onclick="reloadData()" type="submit" /></div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+@(Html.DevExtreme().DataGrid<SaoDomingos.Web.Dev.Mvc.Dados.RazaoDAL>
+    ()
+    .ID("gridContainer")
+    .RowAlternationEnabled(true)
+    .AllowColumnResizing(true)
+    .FocusedRowEnabled(true)
+    .Columns(columns =>
+    {
+    columns.AddFor(m => m.Id).Visible(false);
+    columns.AddFor(m => m.Ordem).Visible(false);
+    columns.AddFor(m => m.Data).Format("dd/MM/yyyy");
+    columns.AddFor(m => m.Contabil);
+    columns.AddFor(m => m.Historico);
+    columns.AddFor(m => m.Valor).Format("R$ #,###.00");
+    columns.AddFor(m => m.Saldo).Format("R$ #,###.00");
+        })
+    .DataSource(d=> d
+    .Mvc()
+    .Controller("Razao")
+    .LoadAction("Get")
+    .LoadParams(new { userData = new JS("function () {return ColherParametros();  }") })
+    .Key("Id"))
+    .FilterRow(f => f.Visible(true))
+    .HeaderFilter(f => f.Visible(true))
+    .AllowColumnReordering(true)
+    .AllowColumnResizing(true)
+    .ColumnAutoWidth(true)
+    .ColumnHidingEnabled(true)
+    .GroupPanel(f => f.Visible(true))
+    .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
+    .Height("auto")
+    .ShowBorders(true)
+    .Grouping(g => g.AutoExpandAll(false))
+    )
+
+
+<script type="text/javascript">
+
+    function ColherParametros() {
+        var ValReqData = {
+            DtIni: $("#DtIni").dxDateBox("instance").option('value').toLocaleDateString(),
+            DtFim: $("#DtFim").dxDateBox("instance").option('value').toLocaleDateString(),
+            Conta: $("#cmbConta").dxSelectBox("instance").option('value')
+        };
+        return JSON.stringify(ValReqData);
+    }
+
+    function reloadData() {
+
+        var dataInicial = $("#DtIni").dxDateBox("instance").option('value')
+        var dataFinal = $("#DtFim").dxDateBox("instance").option('value')
+        var dataLimite = new Date(dataInicial.getFullYear() + 5, dataInicial.getMonth(), dataInicial.getDay());
+
+        if (dataInicial > dataFinal) {
+            alert('A data inicial é maior que a final');
+            return;
+        };
+
+        if (dataFinal > dataLimite) {
+            alert('Intervalo máximo permitido é de 1 ano');
+            return;
+        };
+
+        $('#gridContainer').dxDataGrid("instance").refresh();
+    }
+
+</script>

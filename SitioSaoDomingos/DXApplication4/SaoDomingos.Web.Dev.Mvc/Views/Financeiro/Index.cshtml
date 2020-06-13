@@ -1,21 +1,52 @@
 ﻿@model List<SaoDomingos.Web.Dev.Mvc.Models.ModelView.DiarioView>
 @using SaoDomingos.Web.Dev.Mvc.Models.ModelView
+
+
+
 @{
-    ViewData["Title"] = "Financeiro";
+    ViewData["Title"] = "Resultados";
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+
+
+<nav class="navbar navbar-expand navbar-light bg-light">
+
+    <ul class="navbar-nav">
+
+        <li class="nav-item">
+            <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(new DateTime(2019,01,01)))</div>
+        </li>
+        <li class="nav-item">
+            <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now))</div>
+        </li>
+        <li class="nav-item">
+            <div class="nav-link"><input class="btn btn-primary" name="btnIr" id="btnIr" value="Ir !" onclick="reloadData()" type="submit" /></div>
+        </li>
+    </ul>
+</nav>
 
 @(Html.DevExtreme().DataGrid<DiarioView>()
         .ID("gridContainer")
         .RowAlternationEnabled(true)
+        .ColumnHidingEnabled(true)
+        .ColumnChooser(c => c
+            .Enabled(true)
+            .Mode(GridColumnChooserMode.Select))
+        .Export(e => e
+            .Enabled(true)
+            .FileName("RegistrosFinanceiros"))
+        .OnExporting("exporting")
         .ShowBorders(true)
         .Paging(p => p.Enabled(false))
-        .Editing(e => e.Mode(GridEditMode.Popup)
+        .FocusedRowEnabled(true)
+        .Editing(e => e
+            .Mode(GridEditMode.Form)
             .AllowUpdating(true)
             .AllowDeleting(true)
             .AllowAdding(true)
+            .SelectTextOnEditStart(true)
+            .UseIcons(true)
             .Popup(p => p
                 .Title("Financeiro Infos")
                 .Width("auto")
@@ -33,7 +64,7 @@
                     .ColSpan(2)
                     .Items(groupItems => {
                         groupItems.AddSimpleFor(m => m.DebitoId)
-                        .ColSpan(3) 
+                        .ColSpan(3)
                         .Label(c => c
                             .Text("Débito")
                             .Location(FormLabelLocation.Top));
@@ -68,21 +99,6 @@
                             .Editor(c => c
                                 .TextArea()
                                 .Height(100));
-                        groupItems.AddSimpleFor(m => m.Id)
-                        .Editor(c => c
-                            .TextBox().Disabled(true))
-                        .Label(c => c
-                            .Location(FormLabelLocation.Top));
-                        groupItems.AddSimpleFor(m => m.DataCadastro)
-                        .Editor(c => c
-                            .DateBox().Disabled(true))
-                        .Label(c => c
-                            .Location(FormLabelLocation.Top));
-                        groupItems.AddSimpleFor(m => m.usuarios)
-                        .Editor(c => c
-                            .TextBox().Disabled(true))
-                        .Label(c => c
-                            .Location(FormLabelLocation.Top));
                     });
             }))
         )
@@ -91,10 +107,10 @@
             columns.AddFor(m => m.DataCadastro).Visible(false).Format("dd/MM/yyyy HH:mm");
             columns.AddFor(m => m.usuarios).Visible(false);
             columns.AddFor(m => m.Data).Format("dd/MM/yyyy");
-            columns.AddFor(m => m.debitos);
-            columns.AddFor(m => m.creditos);
+            columns.AddFor(m => m.debitos).HidingPriority(1);
+            columns.AddFor(m => m.creditos).HidingPriority(2);
             columns.AddFor(m => m.participantes);
-            columns.AddFor(m => m.Historico);
+            columns.AddFor(m => m.Historico).HidingPriority(0);
             columns.AddFor(m => m.Valor).Format("R$ #,###.00");
             columns.AddFor(m => m.DebitoId).Visible(false)
                 .Lookup(lookup => lookup
@@ -117,7 +133,7 @@
         })
         .DataSource(d => d.Mvc()
             .Controller("Financeiro")
-            .LoadAction("Pegar")
+            .LoadAction("Pegar").LoadParams(new { userData = new JS("function () {return ColherParametros();  }") })
             .UpdateAction("Edit").Key("Id")
             .DeleteAction("Delete").Key("Id")
             .InsertAction("Adicionar").Key("Id")
@@ -142,3 +158,50 @@
              groupItems.Add().SummaryType(SummaryType.Count);
          }))
     )
+
+<script type="text/javascript">
+
+    function ColherParametros() {
+        var ValReqData = {
+            DtIni: $("#DtIni").dxDateBox("instance").option('value').toLocaleDateString(),
+            DtFim: $("#DtFim").dxDateBox("instance").option('value').toLocaleDateString()
+        };
+        return JSON.stringify(ValReqData);
+    }
+
+    function reloadData() {
+
+        //var dataInicial = $("#DtIni").dxDateBox("instance").option('value')
+        //var dataFinal = $("#DtFim").dxDateBox("instance").option('value')
+        //var dataLimite = new Date(dataInicial.getFullYear() + 1, dataInicial.getMonth(), dataInicial.getDay());
+
+        //if (dataInicial > dataFinal) {
+        //    alert('A data inicial é maior que a final');
+        //    return;
+        //};
+
+        //if (dataFinal > dataLimite) {
+        //    alert('Intervalo máximo permitido é de 1 ano');
+        //    return;
+        //};
+
+        $('#gridContainer').dxDataGrid("instance").refresh();
+    }
+
+    function exporting(e) {
+        var workbook = new ExcelJS.Workbook();
+        var worksheet = workbook.addWorksheet('Financeiro');
+
+        DevExpress.excelExporter.exportDataGrid({
+            component: e.component,
+            worksheet: worksheet,
+            autoFilterEnabled: true
+        }).then(function () {
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'FinanceiroSaoDomingos.xlsx');
+            });
+        });
+        e.cancel = true;
+    }
+
+</script>

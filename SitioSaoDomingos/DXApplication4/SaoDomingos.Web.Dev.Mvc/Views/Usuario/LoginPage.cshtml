@@ -5,20 +5,21 @@
 }
 
 
-    <div class="container mt-5">      
-        <form asp-controller="Usuario" asp-action="LoginPage">
-            <div class="border rounded p-4">
-                <h1 style="color:white">Dados Login</h1>
-                <div class="form-group">
-                    <input type="text" class="form-control" asp-for="Nome" placeholder="Nome" />
+  
+        
+            <form asp-controller="Usuario" asp-action="LoginPage">
+                <div class="border rounded p-4 grid-item">
+                    <h1 style="color:white">Dados Login</h1>
+                    <div class="form-group">
+                        <input type="text" class="form-control" asp-for="Nome" placeholder="Nome" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" asp-for="Senha" placeholder="Senha" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Logar</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" asp-for="Senha" placeholder="Senha" />
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Logar</button>
-                </div>
-            </div>
-        </form>
+            </form>
       
-    </div>      
+      

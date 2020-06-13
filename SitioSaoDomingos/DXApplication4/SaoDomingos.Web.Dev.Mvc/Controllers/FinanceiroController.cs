@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SaoDomingos.Web.Dev.Mvc.Models;
 using SaoDomingos.Web.Dev.Mvc.Models.ModelView;
-using System.Security.Claims;
+
 
 namespace SaoDomingos.Web.Dev.Mvc.Controllers
 {
@@ -20,6 +18,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
         private readonly Base_SaoDomingosContext _ctx;
         private readonly IHttpContextAccessor _user;
 
+        
         public FinanceiroController(Base_SaoDomingosContext ctx, IHttpContextAccessor accessor)
         {
             _ctx = ctx;
@@ -49,7 +48,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
              
@@ -92,9 +91,14 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
         }
 
         [HttpGet]
-        public object Pegar(DataSourceLoadOptions loadOptions)
+        public object Pegar(DataSourceLoadOptions loadOptions, string userData)
         {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.DateFormatString = "dd/MM/yyyy";
+            var md = JsonConvert.DeserializeObject<Parametros>(userData, settings);
+
             List<Diario> dir = _ctx.Diario
+              .Where(c=>c.Data >= md.DtIni && c.Data <= md.DtFim)
               .Include(c => c.Debito)
               .Include(d => d.Credito)
               .Include(e => e.Participante)
@@ -121,6 +125,15 @@ namespace SaoDomingos.Web.Dev.Mvc.Controllers
         {
             return DataSourceLoader.Load(_ctx.Participante, loadOptions);
         }
+
+    }
+
+    public class Parametros
+    {
+        public DateTime DtIni { get; set; }
+        public DateTime DtFim { get; set; }
+        public string Conta { get; set; }
+
 
     }
 }

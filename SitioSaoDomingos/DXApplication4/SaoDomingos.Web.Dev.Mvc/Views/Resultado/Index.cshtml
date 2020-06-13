@@ -31,7 +31,7 @@
     function reloadData() {
         var dataInicial = $("#DtIni").dxDateBox("instance").option('value')
         var dataFinal = $("#DtFim").dxDateBox("instance").option('value')
-        var dataLimite = new Date(dataInicial.getFullYear() + 1, dataInicial.getMonth(), dataInicial.getDay());
+        var dataLimite = new Date(dataInicial.getFullYear() + 5, dataInicial.getMonth(), dataInicial.getDay());
 
         if (dataInicial > dataFinal) {
             alert('A data inicial é maior que a final');

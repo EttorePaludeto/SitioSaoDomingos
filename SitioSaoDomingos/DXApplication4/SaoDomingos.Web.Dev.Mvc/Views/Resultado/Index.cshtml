@@ -2,31 +2,37 @@
 @using SaoDomingos.Web.Dev.Mvc.Dados
 
 @{
-    ViewData["Title"] = "Resultados";
+    ViewData["Title"] = "DRE";
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
 
+<title>@ViewData["Title"]</title>
 
 
-        <nav class="navbar navbar-expand navbar-light bg-light">
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navSubar" aria-expanded="false" aria-controls="navbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(DateTime.Now))</div>
-                </li>
-                <li class="nav-item">
-                    <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now.AddMonths(1).AddDays(-1)))</div>
-                </li>
-                <li class="nav-item">
-                    <div class="nav-link"><input class="btn btn-primary" name="btnIr" id="btnIr" value="Ir !" onclick="reloadData()" type="submit" /></div>
-                </li>
-            </ul>
-        </nav>
-   
+    <div id="navSubar" class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(new DateTime(DateTime.Now.Year, 01, 01)))</div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now.AddMonths(1).AddDays(-1)))</div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link"> @Html.DevExtreme().Button().ID("btnIr").Text("Ir!").Type(ButtonType.Default).StylingMode(ButtonStylingMode.Contained).OnClick("reloadData") </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <div class="container-fluid" id="pivotgrid"></div>
 
 <script type="text/javascript">
-      
+
 
     function reloadData() {
         var dataInicial = $("#DtIni").dxDateBox("instance").option('value')
@@ -45,17 +51,18 @@
 
         var dtIni = $("#DtIni").dxDateBox("instance").option('value').toLocaleDateString();
         var dtFim = $("#DtFim").dxDateBox("instance").option('value').toLocaleDateString();
-       
+
         var salesPivotGrid = $("#pivotgrid").dxPivotGrid({
             allowExpandAll: true,
             allowSortingBySummary: true,
             allowSorting: true,
             allowFiltering: true,
             showColumnGrandTotals: true,
-            showRowGrandTotals:true,
+            showRowGrandTotals: true,
             showRowTotals: true,
             wordWrapEnable: true,
             width: undefined,
+            scrolling: {mode:"virtual"},
             showColumnTotals: true,
             headerFilter: {
                 allowSearch: true,
@@ -77,40 +84,42 @@
                 fields: [{
                     caption: "DRE",
                     dataField: "DRE",
+                    width: 180,
                     area: "row"
                 }, {
                     caption: "Financeiro",
                     dataField: "Financeiro",
                     area: "filter"
-                },{
+                }, {
                     caption: "Economico",
                     dataField: "Economico",
-                        area: "filter"
-                },{
+                    area: "filter"
+                }, {
                     caption: "Contabil",
                     dataField: "Contabil",
-                        area: "filter"
-                },{
-                     dataField: "Valor",
-                     dataType: "number",
-                     summaryType: "sum",
-                     format: "R$ #,###.00",
-                     area: "data"
-        }],
-            store: {
-            type: "odata",
-            name: "DreDAL",
-                url: "Resultado/Get",
-                deserializeDates: true,
-                beforeSend: function (e) {
-                e.params = {
-                    "DtIni": dtIni,
-                    "DtFim": dtFim
-                };
+                    width: 180,
+                    area: "filter"
+                }, {
+                    dataField: "Valor",
+                    dataType: "number",
+                    summaryType: "sum",
+                    format: "R$ #,###.00",
+                    area: "data"
+                }],
+                store: {
+                    type: "odata",
+                    name: "DreDAL",
+                    url: "Resultado/Get",
+                    deserializeDates: true,
+                    beforeSend: function (e) {
+                        e.params = {
+                            "DtIni": dtIni,
+                            "DtFim": dtFim
+                        };
+                    }
+                }
             }
-        }
-              }
-           }).dxPivotGrid("instance");
-            
+        }).dxPivotGrid("instance");
+
     }
 </script>

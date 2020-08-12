@@ -1,10 +1,11 @@
 ﻿@model List<SaoDomingos.Web.Dev.Mvc.Models.Participante>
 @using SaoDomingos.Web.Dev.Mvc.Models
 @{
-    ViewData["Title"] = "Participante";
+    ViewData["Title"] = "Participantes";
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
 
+<title>@ViewData["Title"]</title>
 
 @(Html.DevExtreme().DataGrid<Participante>()
         .ID("gridContainer")

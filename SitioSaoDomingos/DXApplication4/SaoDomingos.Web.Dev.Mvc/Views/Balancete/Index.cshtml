@@ -2,61 +2,129 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Balancete";
     Layout = "~/Views/Shared/_LayoutMenu.cshtml";
 }
 
-<nav class="navbar navbar-expand navbar-light bg-light">
+    <title>@ViewData["Title"]</title>
 
-    <ul class="navbar-nav">
 
-        <li class="nav-item">
-            <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(new DateTime(2019,01,01)))</div>
-        </li>
-        <li class="nav-item">
-            <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now))</div>
-        </li>
-        <li class="nav-item">
-            <div class="nav-link"><input class="btn btn-primary" name="btnIr" id="btnIr" value="Ir !" onclick="reloadData()" type="submit" /></div>
-        </li>
-    </ul>
-</nav>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navSubar" aria-expanded="false" aria-controls="navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navSubar" class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <div class="nav-link">@(Html.DevExtreme().DateBox().Placeholder("Data Inicial").DisplayFormat("dd/MM/yyyy").ID("DtIni").Value(new DateTime(2019,01,01)))</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link"> @(Html.DevExtreme().DateBox().Placeholder("Data Final").DisplayFormat("dd/MM/yyyy").ID("DtFim").Value(DateTime.Now))</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link"> @Html.DevExtreme().Button().ID("btnIr").Text("Ir!").Type(ButtonType.Default).StylingMode(ButtonStylingMode.Contained).OnClick("reloadData") </div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link">
+                        @(Html.DevExtreme().CheckBox()
+            .ID("autoExpand")
+            .Text("Recolher Todos os Grupos")
+            .Value(false)
+            .OnValueChanged(@<text>
+                function(data) {
+                    var dataGrid = $("#gridContainer").dxDataGrid("instance");
+                    dataGrid.option("grouping.autoExpandAll", !data.value);
+                }
+                 </text>))
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
 @(Html.DevExtreme().DataGrid<SaoDomingos.Web.Dev.Mvc.Dados.BalanceteDAL>
-    ()
-    .ID("gridContainer")
-    .RowAlternationEnabled(true)
-    .AllowColumnResizing(true)
-    .FocusedRowEnabled(true)
-    .Columns(columns =>
-    {
-        columns.AddFor(m => m.Grupo);
-        columns.AddFor(m => m.SubGrupo);
-        columns.AddFor(m => m.Financeiro);
-        columns.AddFor(m => m.Economico);
-        columns.AddFor(m => m.Contabil);
-        columns.AddFor(m => m.SaldoInicial).Format("R$ #,###.00").Caption("Sd.Inicial");
-        columns.AddFor(m => m.Debito).Format("R$ #,###.00");
-        columns.AddFor(m => m.Credito).Format("R$ #,###.00");
-        columns.AddFor(m => m.SaldoFinal).Format("R$ #,###.00").Caption("Sd.Final");
-    })
-    .DataSource(d=> d
-    .Mvc()
-    .Controller("Balancete")
-    .LoadAction("Get")
-    .Key("Id")
-    .LoadParams(new { userData = new JS("function () {return ColherParametros();  }") }))
-    .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
-    .AllowColumnReordering(true)
-    .AllowColumnResizing(true)
-    .ColumnAutoWidth(true)
-    .ColumnHidingEnabled(true)
-    .GroupPanel(f => f.Visible(true))
-    .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
-    .Height("auto")
-    .ShowBorders(true)
-    .Grouping(g => g.AutoExpandAll(false))
+            ()
+            .ID("gridContainer")
+            .RowAlternationEnabled(true)
+        .AllowColumnResizing(true)
+        .FocusedRowEnabled(true)
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.Grupo).GroupIndex(0);
+            columns.AddFor(m => m.SubGrupo).GroupIndex(1);
+            columns.AddFor(m => m.Financeiro).GroupIndex(2);
+            columns.AddFor(m => m.Economico).GroupIndex(3);
+            columns.AddFor(m => m.Contabil).HidingPriority(0);
+            columns.AddFor(m => m.SaldoInicial).Format("R$ #,###.00").Caption("Sd.Inicial");
+            columns.AddFor(m => m.Debito).Format("R$ #,###.00");
+            columns.AddFor(m => m.Credito).Format("R$ #,###.00");
+            columns.AddFor(m => m.SaldoFinal).Format("R$ #,###.00").Caption("Sd.Final");
+        })
+        .DataSource(d => d
+        .Mvc()
+        .Controller("Balancete")
+        .LoadAction("Get")
+        .Key("Id")
+        .LoadParams(new { userData = new JS("function () {return ColherParametros();  }") }))
+        .FilterRow(f => f.Visible(true))
+        .HeaderFilter(f => f.Visible(true))
+        .AllowColumnReordering(true)
+        .AllowColumnResizing(true)
+        .ColumnChooser(c => c.Enabled(true))
+        .ColumnAutoWidth(true)
+        .ColumnHidingEnabled(true)
+        .GroupPanel(f => f.Visible(true))
+        .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
+        .Height("auto")
+        .ShowBorders(true)
+        .Grouping(g => g.ContextMenuEnabled(true).AllowCollapsing(true).AutoExpandAll(true))
+        .Summary(s => s.GroupItems(items =>
+        {
+            items.AddFor(m => m.SaldoInicial)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}")
+            .ShowInGroupFooter(false)
+            .AlignByColumn(true);
+            items.AddFor(m => m.Debito)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}")
+            .ShowInGroupFooter(false)
+            .AlignByColumn(true);
+            items.AddFor(m => m.Credito)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}")
+            .ShowInGroupFooter(false)
+            .AlignByColumn(true);
+            items.AddFor(m => m.SaldoFinal)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}")
+            .ShowInGroupFooter(false)
+            .AlignByColumn(true);
+        })
+        .TotalItems(items=> {
+            items.AddFor(m => m.SaldoInicial)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}");
+            items.AddFor(m => m.Debito)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}");
+            items.AddFor(m => m.Credito)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}");
+            items.AddFor(m => m.SaldoFinal)
+            .SummaryType(SummaryType.Sum)
+            .ValueFormat("R$ #,###.00")
+            .DisplayFormat("{0}");
+        }))
     )
 
 

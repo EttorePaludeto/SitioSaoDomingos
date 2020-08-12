@@ -1,0 +1,26 @@
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Data" Assembly="DevExpress.Data.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
+
+<dx:ASPxMenu runat="server"
+    CssFilePath="{0}/styles.css" SpriteCssFilePath="{0}/sprite.css" CssPostfix="Office2003Blue"
+	ShowPopOutImages="True" BorderBetweenItemAndSubMenu="HideRootOnly">
+	<ItemSubMenuOffset FirstItemX="2" LastItemX="2" X="2" />
+</dx:ASPxMenu>
+
+<dx:ASPxMenu runat="server" SkinID="MenuToolBar" CssFilePath="{0}/styles.css"  ShowPopOutImages="True"
+    CssPostfix="Office2003Blue" SpriteCssFilePath="{0}/sprite.css" SeparatorHeight="100%"
+    AutoSeparators="None" Width="100%" ItemAutoWidth="False">
+    <SubMenuStyle GutterWidth="0px"  ></SubMenuStyle>
+    <RootItemSubMenuOffset FirstItemX="-1" X="-1" FirstItemY="-1" Y="-1"/>
+    <ItemStyle DropDownButtonSpacing=""></ItemStyle>
+</dx:ASPxMenu>
+<dx:ASPxMenu runat="server" SkinID="MenuButtons" SpriteCssFilePath="{0}/sprite.css" CssFilePath="{0}/styles.css"
+		 AutoSeparators="None" ItemSpacing="5px" ShowPopOutImages="True" CssPostfix="Office2003Blue" CssClass="menuButtons menuButtons_Office2003Blue" SeparatorHeight="0px">
+    <Border BorderWidth="0px"/>
+    <RootItemSubMenuOffset X="-1" LastItemX="-1" FirstItemX="-1"></RootItemSubMenuOffset>
+    <SubMenuItemStyle Wrap="False"></SubMenuItemStyle>
+</dx:ASPxMenu>
+<dx:ASPxMenu runat="server" SkinID="MenuLinks" CssFilePath="{0}/styles.css" ShowPopOutImages="True" 
+    CssPostfix="Office2003Blue" SpriteCssFilePath="{0}/sprite.css"   
+    CssClass="menuLinks_Office2003Blue">
+</dx:ASPxMenu>

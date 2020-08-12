@@ -36,7 +36,7 @@ namespace SaoDomingos_Web_Dev_Mvc
                .AddCookie(options => options.LoginPath = "/Home/Index");
 
             services.AddDbContext<Base_SaoDomingosContext>(o =>
-               o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+               o.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionProd")));
 
             services.AddScoped<ADOContext>();
 

@@ -13,7 +13,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
         public ADOContext(IConfiguration configuration)
         {
             _configuration = configuration;
-            connString = _configuration.GetConnectionString("DefaultConnection");
+            connString = _configuration.GetConnectionString("DefaultConnectionProd");
         }
 
 
@@ -22,7 +22,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
         public IEnumerable<T> Getby<T>(string SQL) where T: class
         {
             List<T> lista = new List<T>();
-            using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("DefaultConnectionProd")))
             {
                 SqlCommand cmd = new SqlCommand(SQL, con);
                 cmd.CommandType = CommandType.Text;

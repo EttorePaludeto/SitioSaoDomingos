@@ -89,7 +89,7 @@ namespace SaoDomingos.Web.Dev.Mvc.Dados
             where d.Data < @DT_INI
             group by p.Grupo, p.SubGrupo,  p.Financeiro, p.Economico, p.Contabil
             union
-            select p.Grupo, p.SubGrupo, p.Financeiro, p.Economico, p.Contabil, SUM(d.valor) AS SaldoInicial,  0 as Debito, 0 as Credito from diario as d inner join PlanoContas as p on d.CreditoId = p.Id
+            select p.Grupo, p.SubGrupo, p.Financeiro, p.Economico, p.Contabil, SUM(d.valor)*-1 AS SaldoInicial,  0 as Debito, 0 as Credito from diario as d inner join PlanoContas as p on d.CreditoId = p.Id
             where d.Data < @DT_INI
             group by p.Grupo, p.SubGrupo,  p.Financeiro, p.Economico, p.Contabil
             ) AS D

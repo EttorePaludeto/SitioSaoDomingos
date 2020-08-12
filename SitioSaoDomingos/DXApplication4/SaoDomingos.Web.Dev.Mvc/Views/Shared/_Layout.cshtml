@@ -13,7 +13,7 @@
     <link href="~/css/Site.css" rel="stylesheet" />
     <link href="~/css/devextreme/bootstrap.css" rel="stylesheet" />
     <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
-    <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+    <link href="~/css/devextreme/dx.material.orange.dark.compact.css" rel="stylesheet" />
 
     <script src="~/js/devextreme/jquery.js"></script>
     <script src="~/js/devextreme/bootstrap.js"></script>
@@ -38,31 +38,17 @@
     <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
 
 </head>
-
-    <body class="bodyInicio">
-
-       
-
-            <nav class="navbar navbar-light bg-transparent fixed-top navbar-expand-md">
-
-                <button type="button" class="navbar-toggler bg-light" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link" style="font-size:20px;font-weight:600;color:white">Login</a></li>
-                    </ul>
-                </div>
-            </nav>
-
-      
-
-            @RenderBody()
-        
-       
-
+<body class="bodyInicio">
+    <nav class="navbar navbar-light bg-transparent fixed-top navbar-expand-md">
+        <button type="button" class="navbar-toggler bg-light" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a href="~/Usuario/LoginPage" class="nav-link" style="font-size:20px;font-weight:600;color:white">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    @RenderBody()
 </body>
-
-
 </html>

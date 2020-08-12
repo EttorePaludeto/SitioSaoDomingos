@@ -1,0 +1,14 @@
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Data" Assembly="DevExpress.Data.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
+<%@ Register TagPrefix="dx" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
+
+<dx:ASPxFileManager runat="server" SettingsLoadingPanel-ImagePosition="Top">
+    <Styles CssFilePath="{0}/styles.css" CssPostfix="RedWine"></Styles>
+    <Images SpriteCssFilePath="{0}/sprite.css" 
+            FolderContainerNodeLoadingPanel-Url="Web/tvNodeLoading.gif"></Images>
+    <ImagesDetailsView>
+        <HeaderActiveFilter SpriteProperties-CssClass="dxWeb_fmGvHeaderFilterActive_RedWine"></HeaderActiveFilter>
+        <HeaderFilter SpriteProperties-CssClass="dxWeb_fmGvHeaderFilter_RedWine"></HeaderFilter>
+        <HeaderSortDown SpriteProperties-CssClass="dxWeb_fmGvHeaderSortDown_RedWine"></HeaderSortDown>
+        <HeaderSortUp SpriteProperties-CssClass="dxWeb_fmGvHeaderSortUp_RedWine"></HeaderSortUp>
+    </ImagesDetailsView>
+</dx:ASPxFileManager>
